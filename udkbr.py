@@ -31,6 +31,7 @@ class BuildRun():
 		for line in lines:
 			if not line.startswith('#') and line != '' and os.path.exists(line):
 				udk_path = line
+				break
 
 		if udk_path == '':
 			print 'set udk path in config.ini then run'
@@ -57,10 +58,10 @@ class BuildRun():
 					new_output += output + '\n'
 			logger.error(new_output)
 			raw_input()
-			exit(0)
+			sys.exit(0)
 		else:
 			print 'Start'
-
+			sys.exit(0)
 
 	def click_cancel(self):	
 		hwnd = win32gui.FindWindowEx(0, 0, 32770, "Message")
@@ -81,7 +82,7 @@ class BuildRun():
 			time.sleep(0.05)
 			hwnd = win32gui.FindWindow("#32770","Message")
 			remaining -= 0.05
-			if remaining == 0:
+			if remaining <= 0:
 				return False
 		else:
 			hwnd = win32gui.FindWindowEx(hwnd, 0, "Button", "&Yes")
