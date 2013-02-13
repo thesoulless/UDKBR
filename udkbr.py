@@ -25,12 +25,15 @@ class BuildRun():
 		_succ = False
 		self.timeout = 5
 		udk_path = ''
+		map_name = ''
 		config = open('config.ini')
 		lines = config.read().replace("\r", "").split('\n')
 
 		for line in lines:
-			if not line.startswith('#') and line != '' and os.path.exists(line):
+			if not line.startswith('#') and not line.endswith('udk') and line != '' and os.path.exists(line):
 				udk_path = line
+			if not line.startswith('#') and line.endswith('udk') and line != '':
+				map_name = line
 				break
 
 		if udk_path == '':
@@ -38,7 +41,10 @@ class BuildRun():
 			input()
 			sys.exit(0)
 
-		p = Popen( [udk_path + "UDK.com", "editor"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+		if map_name:
+			p = Popen( [udk_path + "UDK.com", "editor " + map_name], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+		else:			
+			p = Popen( [udk_path + "UDK.com", "editor"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 		h = self.check_exist()
 		if (h):
@@ -47,9 +53,12 @@ class BuildRun():
 			strArr = result.replace("\r", "").split('\n')
 
 			for output in strArr:
-				if 'Success' in output:                            
+				if 'Success' in output:
 					_succ = True
-					p = Popen( [udk_path + "UDK.exe", "editor"])
+					if map_name:
+						p = Popen( [udk_path + "UDK.com", "editor " + map_name])
+					else:						
+						p = Popen( [udk_path + "UDK.com", "editor"])
 					sys.exit(0)
 			_succ = False
 			new_output = ''

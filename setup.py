@@ -2,7 +2,7 @@ import sys
 from cx_Freeze import setup, Executable
 
 build_exe_options = {"packages": ["os", "time", "subprocess", "sys", "win32gui"],
-"excludes": ["tkinter"], "optimize": 2, "include_files": [("config.ini", "README.md")]}
+"excludes": ["tkinter"], "optimize": 2, "include_files": ["config.ini", "README.md"]}
 
 base = None
 
