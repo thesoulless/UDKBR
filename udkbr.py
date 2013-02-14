@@ -25,7 +25,7 @@ class BuildRun():
 		_succ = False
 		self.timeout = 5
 		udk_path = ''
-		map_name = ''
+		command = ''
 		config = open('config.ini')
 		lines = config.read().replace("\r", "").split('\n')
 
@@ -33,7 +33,7 @@ class BuildRun():
 			if not line.startswith('#') and not line.endswith('udk') and line != '' and os.path.exists(line):
 				udk_path = line
 			if not line.startswith('#') and line.endswith('udk') and line != '':
-				map_name = line
+				command = line
 				break
 
 		if udk_path == '':
@@ -41,8 +41,8 @@ class BuildRun():
 			input()
 			sys.exit(0)
 
-		if map_name:
-			p = Popen( [udk_path + "UDK.com", "editor " + map_name], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+		if command:
+			p = Popen( [udk_path + "UDK.com", "editor " + command], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 		else:			
 			p = Popen( [udk_path + "UDK.com", "editor"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
@@ -55,8 +55,8 @@ class BuildRun():
 			for output in strArr:
 				if 'Success' in output:
 					_succ = True
-					if map_name:
-						p = Popen( [udk_path + "UDK.com", "editor " + map_name])
+					if command:
+						p = Popen( [udk_path + "UDK.com", "editor " + command])
 					else:						
 						p = Popen( [udk_path + "UDK.com", "editor"])
 					sys.exit(0)
